@@ -6,13 +6,15 @@
 /*   By: mohel-am <mohel-am@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 20:13:40 by mohel-am          #+#    #+#             */
-/*   Updated: 2024/12/07 20:40:31 by mohel-am         ###   ########.fr       */
+/*   Updated: 2024/12/09 22:06:16 by mohel-am         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include <unistd.h>
 #include <signal.h>
+#include <stdlib.h>
+#include "ft_printf/ft_printf.h"
+
 
 void	send_signal(int server_pid, unsigned char c)
 {
@@ -40,11 +42,11 @@ int main(int ac, char **av)
 	if (ac == 3)
 	{
 		server_pid = atoi(av[1]);
-		str = av[2];
+		str = (unsigned char *)av[2];
 		while (*str)
 			send_signal(server_pid, *str++);
 		send_signal(server_pid, '\0');
 	}
 	else
-		printf("Usage : %s <server pid> <massage>", av[0]);
+		ft_printf("Usage : %s <server pid> <massage>", av[0]);
 }

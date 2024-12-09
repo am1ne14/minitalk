@@ -6,13 +6,14 @@
 /*   By: mohel-am <mohel-am@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 20:32:18 by mohel-am          #+#    #+#             */
-/*   Updated: 2024/12/07 20:45:50 by mohel-am         ###   ########.fr       */
+/*   Updated: 2024/12/09 22:06:59 by mohel-am         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <unistd.h>
 #include <signal.h>
+#include "ft_printf/ft_printf.h"
 
 void	convert_signal(int signal)
 {
@@ -24,9 +25,9 @@ void	convert_signal(int signal)
 	if (index == 8)
 	{
 		if (tmp == '\0')
-			printf("\n");
+			ft_printf("\n");
 		else
-			printf("%c", tmp);
+			ft_printf("%c", tmp);
 		index = 0;
 		tmp = 0;
 	}
@@ -36,7 +37,7 @@ void	convert_signal(int signal)
 
 int main()
 {
-	printf("server_pid : %d\n", getpid());
+	ft_printf("server_pid : %d\n", getpid());
 	signal(SIGUSR1, convert_signal);
 	signal(SIGUSR2, convert_signal);
 	while (1)
