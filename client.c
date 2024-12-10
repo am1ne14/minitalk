@@ -6,13 +6,11 @@
 /*   By: mohel-am <mohel-am@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 20:13:40 by mohel-am          #+#    #+#             */
-/*   Updated: 2024/12/10 04:49:26 by mohel-am         ###   ########.fr       */
+/*   Updated: 2024/12/10 05:11:34 by mohel-am         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <unistd.h>
 #include <signal.h>
-#include <stdlib.h>
 #include "ft_printf/ft_printf.h"
 
 void	receive_from_server(int signal)
@@ -41,7 +39,7 @@ void	send_signal(int server_pid, unsigned char c)
 	}
 }
 
-int	miniatoi(char *str)
+int	check_pid(char *str)
 {
 	int	pid;
 
@@ -52,7 +50,7 @@ int	miniatoi(char *str)
 	{
 		if (*str < '0' || *str > '9')
 		{
-			ft_printf("Invalid character in PID\n");
+			ft_printf("Invalid PID\n");
 			return (-1);
 		}
 		pid = pid * 10 + (*str - '0');
@@ -70,7 +68,7 @@ int	main(int ac, char **av)
 	signal(SIGUSR2, receive_from_server);
 	if (ac == 3)
 	{
-		server_pid = miniatoi(av[1]);
+		server_pid = check_pid(av[1]);
 		str = (unsigned char *)av[2];
 		while (*str)
 			send_signal(server_pid, *str++);

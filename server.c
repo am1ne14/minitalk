@@ -6,12 +6,10 @@
 /*   By: mohel-am <mohel-am@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 20:32:18 by mohel-am          #+#    #+#             */
-/*   Updated: 2024/12/10 04:44:54 by mohel-am         ###   ########.fr       */
+/*   Updated: 2024/12/10 05:09:51 by mohel-am         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
-#include <unistd.h>
 #include <signal.h>
 #include "ft_printf/ft_printf.h"
 
