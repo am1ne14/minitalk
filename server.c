@@ -6,7 +6,7 @@
 /*   By: mohel-am <mohel-am@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 20:32:18 by mohel-am          #+#    #+#             */
-/*   Updated: 2024/12/09 22:06:59 by mohel-am         ###   ########.fr       */
+/*   Updated: 2024/12/10 04:44:54 by mohel-am         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 #include <signal.h>
 #include "ft_printf/ft_printf.h"
 
-void	convert_signal(int signal)
+void	convert_signal(int signal, siginfo_t *info, void *context)
 {
-	static int	index;
 	static unsigned char	tmp;
+	static int				index;
 
 	tmp |= (signal == SIGUSR1);
 	index++;
@@ -31,15 +31,25 @@ void	convert_signal(int signal)
 		index = 0;
 		tmp = 0;
 	}
-	else 
+	else
 		tmp <<= 1;
+	if (signal == SIGUSR1)
+		kill(info->si_pid, SIGUSR1);
+	else if (signal == SIGUSR2)
+		kill(info->si_pid, SIGUSR2);
+	(void)context;
 }
 
-int main()
+int	main(void)
 {
-	ft_printf("server_pid : %d\n", getpid());
-	signal(SIGUSR1, convert_signal);
-	signal(SIGUSR2, convert_signal);
+	struct sigaction	minitalk;
+
+	minitalk.sa_sigaction = &convert_signal;
+	minitalk.sa_flags = SA_SIGINFO;
+	sigemptyset(&minitalk.sa_mask);
+	ft_printf("server_pid --> %d\n", getpid());
+	sigaction(SIGUSR1, &minitalk, NULL);
+	sigaction(SIGUSR2, &minitalk, NULL);
 	while (1)
 		pause();
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: mohel-am <mohel-am@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/07 20:13:40 by mohel-am          #+#    #+#             */
-/*   Updated: 2024/12/09 22:06:16 by mohel-am         ###   ########.fr       */
+/*   Updated: 2024/12/10 04:49:26 by mohel-am         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,18 @@
 #include <stdlib.h>
 #include "ft_printf/ft_printf.h"
 
+void	receive_from_server(int signal)
+{
+	if (signal == SIGUSR1)
+		ft_printf("Received: 1\n");
+	else if (signal == SIGUSR2)
+		ft_printf("Received: 0\n");
+}
 
 void	send_signal(int server_pid, unsigned char c)
 {
-	int	i;
 	unsigned char	tmp;
+	int				i;
 
 	i = 8;
 	while (i > 0)
@@ -30,18 +37,40 @@ void	send_signal(int server_pid, unsigned char c)
 			kill(server_pid, SIGUSR2);
 		else
 			kill(server_pid, SIGUSR1);
-		usleep(100);
+		usleep(500);
 	}
 }
 
-int main(int ac, char **av)
+int	miniatoi(char *str)
 {
-	int	server_pid;
+	int	pid;
+
+	pid = 0;
+	if (str == NULL)
+		return (0);
+	while (*str)
+	{
+		if (*str < '0' || *str > '9')
+		{
+			ft_printf("Invalid character in PID\n");
+			return (-1);
+		}
+		pid = pid * 10 + (*str - '0');
+		str++;
+	}
+	return (pid);
+}
+
+int	main(int ac, char **av)
+{
+	int				server_pid;
 	unsigned char	*str;
 
+	signal(SIGUSR1, receive_from_server);
+	signal(SIGUSR2, receive_from_server);
 	if (ac == 3)
 	{
-		server_pid = atoi(av[1]);
+		server_pid = miniatoi(av[1]);
 		str = (unsigned char *)av[2];
 		while (*str)
 			send_signal(server_pid, *str++);
